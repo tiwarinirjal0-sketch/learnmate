@@ -1,10 +1,13 @@
-import Nav from "./components/common/Navbar";
 
+import Nav from "./components/common/Navbar";
+import AppRoutes from "./routes/AppRoutes";
+import Home from "./pages/Homepage";
 
 export default function App(){
   return(
     <>
-     <Nav />
+      <Nav />
+       <Home />
     </>
   )
 }
