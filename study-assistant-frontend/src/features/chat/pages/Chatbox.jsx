@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { chatApi } from "../api/chatapi";
 
 export default function ChatBox() {
   const [messages, setMessages] = useState([
@@ -17,7 +18,7 @@ export default function ChatBox() {
     el.style.height = Math.min(el.scrollHeight, 160) + "px";
   };
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (!input.trim()) return;
 
     setMessages((prev) => [...prev, { role: "user", text: input }]);
@@ -25,12 +26,8 @@ export default function ChatBox() {
     if (textareaRef.current) textareaRef.current.style.height = "auto";
 
     // Placeholder reply — swap this out for a real API call
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", text: "Got it! (this is a placeholder reply)" },
-      ]);
-    }, 500);
+    const {reply} = await chatApi(messages)
+    setMessages((prev)=>[...prev,{role:"assistant", text:reply}])
   };
 
   const handleKeyDown = (e) => {
