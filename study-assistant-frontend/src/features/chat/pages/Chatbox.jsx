@@ -3,7 +3,7 @@ import { chatApi } from "../api/chatapi";
 
 export default function ChatBox() {
   const [messages, setMessages] = useState([
-    { role: "assistant", text: "Hi! How can I help you today?" },
+    
   ]);
   const [input, setInput] = useState("");
   const scrollRef = useRef(null);
@@ -19,16 +19,27 @@ export default function ChatBox() {
   };
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
+  if (!input.trim()) return;
 
-    setMessages((prev) => [...prev, { role: "user", text: input }]);
-    setInput("");
-    if (textareaRef.current) textareaRef.current.style.height = "auto";
+  const updatedMessages = [
+    ...messages,
+    { role: "user", text: input }
+  ];
 
-    // Placeholder reply — swap this out for a real API call
-    const {reply} = await chatApi(messages)
-    setMessages((prev)=>[...prev,{role:"assistant", text:reply}])
-  };
+  setMessages(updatedMessages);
+  setInput("");
+
+  if (textareaRef.current) {
+    textareaRef.current.style.height = "auto";
+  }
+
+  const { reply } = await chatApi(updatedMessages);
+
+  setMessages((prev) => [
+    ...prev,
+    { role: "model", text: reply }
+  ]);
+};
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {

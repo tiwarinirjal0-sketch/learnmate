@@ -1,10 +1,16 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
+
 import UserModel from '../model/User.model.js';
 import jwt from 'jsonwebtoken';
 import { hashPassword, comparePassword } from '../utils/helper.js';
 import { GoogleGenAI } from '@google/genai';
 
 
-const ai = new GoogleGenAI({})
+const ai = new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY
+})
 
 export async function register(req, res) {
     try {
@@ -69,7 +75,7 @@ export async function Chat(req, res){
     try {
         
         
-        const response = await ai.interactions.create({
+        const response = await ai.models.generateContent({
             model:"gemini-2.5-flash",
             contents : req.body.message
         })
@@ -78,6 +84,6 @@ export async function Chat(req, res){
         })
 
     } catch (error) {
-        return res.status(500).json({error:error})
+        return res.status(500).json({error:error.message})
     }
 }
