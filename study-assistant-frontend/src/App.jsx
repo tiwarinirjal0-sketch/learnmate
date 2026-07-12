@@ -1,13 +1,12 @@
-
+import { BrowserRouter } from "react-router-dom";
 import Nav from "./components/common/Navbar";
 import AppRoutes from "./routes/AppRoutes";
-import Home from "./pages/Homepage";
 
-export default function App(){
-  return(
-    <>
+export default function App() {
+  return (
+    <BrowserRouter>
       <Nav />
-       <Home />
-    </>
-  )
+      <AppRoutes />
+    </BrowserRouter>
+  );
 }
