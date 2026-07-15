@@ -3,7 +3,7 @@ import { useState } from "react"
 
 
 
-export default function QuizCards({qnIndex,quizzes}){
+export default function QuizCards({qnIndex,quizData}){
     
     
     return(
@@ -12,7 +12,7 @@ export default function QuizCards({qnIndex,quizzes}){
             <div 
             
             className="absolute h-full w-full bg-amber-50 flex items-center justify-center">
-             {quizzes[qnIndex].qn}
+             {quizData[qnIndex].qn}
             </div>
             
            
