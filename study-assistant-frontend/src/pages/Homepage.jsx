@@ -1,14 +1,7 @@
 import ChatBox from "../features/chat/pages/Chatbox";
-<<<<<<< HEAD
-import { Navigate,useNavigate } from "react-router-dom";
-
-export default function Home(){
-     const nav = useNavigate()
-=======
 import { useNavigate } from "react-router-dom";
 export default function Home(){
     const nav = useNavigate()
->>>>>>> fetaure/flashcard
     return(
 
         <>
