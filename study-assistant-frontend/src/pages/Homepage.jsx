@@ -1,8 +1,14 @@
 import ChatBox from "../features/chat/pages/Chatbox";
+<<<<<<< HEAD
 import { Navigate,useNavigate } from "react-router-dom";
 
 export default function Home(){
      const nav = useNavigate()
+=======
+import { useNavigate } from "react-router-dom";
+export default function Home(){
+    const nav = useNavigate()
+>>>>>>> fetaure/flashcard
     return(
 
         <>
@@ -33,8 +39,16 @@ export default function Home(){
               <div className="bg-amber-900 col-span-2 row-span-2">
                 <ChatBox />
               </div>
-              <div className="bg-amber-900"></div>
-              <div className="bg-amber-900"></div>
+              <div className="bg-amber-900">
+        
+              </div>
+              <div className="bg-amber-900">
+                <button
+                 onClick={()=>nav("/flashcards")}
+                 className="bg-yellow-200 p-2 ">Go to the flashcard
+                    
+                </button>
+              </div>
  
              
 

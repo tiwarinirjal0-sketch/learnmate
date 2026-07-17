@@ -118,5 +118,25 @@ export async function QuizGenerator(req, res){
         
     } catch (error) {
         return res.status(500).json({error:error})
+    }}
+
+export async function FlashCard(req, res){
+    try{
+       const response = await ai.models.generateContent({
+        model:"gemini-2.5-flash",
+        contents:`Create flashcards from the input.
+
+                Return only a JSON array of objects:
+
+                [{"front":"Question","back":"Answer"}]
+
+                Cover the important concepts. No markdown or extra text.
+
+                ${JSON.stringify(req.body)}`
+       })
+       return res.status(200).json({
+        result : JSON.parse(await response.text)})
+    }catch(error){
+        return res.status(500).json({error:error.message})
     }
 }
