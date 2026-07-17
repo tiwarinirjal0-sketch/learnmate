@@ -1,8 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "../pages/Homepage";
+import Flashcards from "../features/flashcards/pages/Flashcards";
 // import Login from "./Login";
-// import Dashboard from "./Dashboard";
+// import Dashboard from "./Dashbod";
 // import NotFound from "./NotFound";
 
 const AppRoutes = () => {
@@ -10,6 +11,7 @@ const AppRoutes = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/flashcards" element={<Flashcards />} />
         {/* <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<NotFound />} /> */}
