@@ -1,23 +1,10 @@
 export default async function FlashcardApi(content) {
-    // --- TEMPORARY: hardcoded mock, remove once backend is ready ---
-    console.log("Mock FlashcardApi called with content:", content);
-
-    await new Promise((resolve) => setTimeout(resolve, 1200)); // fake network delay
-
-    return [
-        { front: "What is the powerhouse of the cell?", back: "The mitochondria" },
-        { front: "What pigment absorbs light for photosynthesis?", back: "Chlorophyll" },
-        { front: "What gas do plants release during photosynthesis?", back: "Oxygen" },
-        { front: "Where does photosynthesis mainly occur in plant cells?", back: "Chloroplasts" },
-        { front: "What are the two main stages of photosynthesis?", back: "Light-dependent reactions and the Calvin cycle" },
-    ];
-
-    // --- REAL VERSION: uncomment when backend is ready ---
-    /*
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/flashcards`, {
+  
+    
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/flashcard`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contents: content })
+        body: JSON.stringify({ text: content })
     });
 
     if (!res.ok) {
@@ -33,5 +20,5 @@ export default async function FlashcardApi(content) {
 
     const data = await res.json();
     return data.result;
-    */
+    
 }
