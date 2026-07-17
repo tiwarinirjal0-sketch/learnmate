@@ -87,3 +87,36 @@ export async function Chat(req, res){
         return res.status(500).json({error:error.message})
     }
 }
+
+export async function QuizGenerator(req, res){
+    try {
+        const response = await ai.models.generateContent({
+            model:"gemini-2.5-flash",
+            contents: `You are a study assistant that converts source material into flashcard-style Q&A pairs.
+
+                        Given the CONTENT below, generate flashcards as a JSON array in this exact format:
+
+                        [
+                        { "qn": "Question text", "ans": "Answer text" }
+                        ]
+
+                        Rules:
+                        - Generate 10-15 question/answer pairs covering the key ideas in the content.
+                        - Base everything strictly on the CONTENT provided — no outside facts.
+                        - Keep answers concise (1-3 sentences).
+                        - Return ONLY the JSON array. No markdown fences, no extra text.
+
+                        CONTENT:
+                        """
+                        ${JSON.stringify(req.body.contents)}
+                         
+                        """`
+        })
+        return res.status(200).json({
+            result:JSON.parse(await response.text)
+        })
+        
+    } catch (error) {
+        return res.status(500).json({error:error})
+    }
+}
