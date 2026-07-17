@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {  Routes, Route } from "react-router-dom";
 
 import Home from "../pages/Homepage";
 import Flashcards from "../features/flashcards/pages/Flashcards";
@@ -8,7 +8,6 @@ import Flashcards from "../features/flashcards/pages/Flashcards";
 
 const AppRoutes = () => {
   return (
-    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/flashcards" element={<Flashcards />} />
@@ -16,7 +15,6 @@ const AppRoutes = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<NotFound />} /> */}
       </Routes>
-    </BrowserRouter>
   );
 };
 
