@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { register, login, getUser, updateUser, Chat, FlashCard,QuizGenerator } from '../controllers/auth.controller.js';
+import { register, login, getUser, updateUser, Chat, FlashCard,QuizGenerator, Summarize } from '../controllers/auth.controller.js';
 import { auth, verifyUser, localVariables } from '../middleware/auth.middleware.js';
 
 const router = Router();
@@ -11,5 +11,6 @@ router.put('/update', auth, updateUser);
 router.post('/chat', Chat)
 router.post('/quiz',QuizGenerator)
 router.post('/flashcard', FlashCard)
+router.post('/summarize', Summarize)
 
 export default router;

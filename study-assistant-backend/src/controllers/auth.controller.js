@@ -97,7 +97,7 @@ export async function QuizGenerator(req, res){
                         Given the CONTENT below, generate flashcards as a JSON array in this exact format:
 
                         [
-                        { "qn": "Question text", "ans": "Answer text" }
+                          { "qn": "Question text", "ans": "Correct answer text", "options": ["Correct answer text", "Distractor 1", "Distractor 2", "Distractor 3"] }
                         ]
 
                         Rules:
@@ -137,6 +137,24 @@ export async function FlashCard(req, res){
        return res.status(200).json({
         result : JSON.parse(await response.text)})
     }catch(error){
+        return res.status(500).json({error:error.message})
+    }
+}
+
+export async function Summarize(req, res){
+    try {
+        const response = await ai.models.generateContent({
+            model:"gemini-2.5-flash",
+            contents:`You will be given a content to you what you have to do is like have a detailed summarization of the content for someone who will be cramming for the exam make it deatiled put relevant examples in the response make it totally understandable and also like have like nepali translations of jargons with fun and intresting examples in nepali english 
+            
+            clients content:
+            ${JSON.stringify(req.body.contents)}
+            `
+
+        })
+        return res.status(200).json({
+        result : await response.text})
+    } catch (error) {
         return res.status(500).json({error:error.message})
     }
 }
