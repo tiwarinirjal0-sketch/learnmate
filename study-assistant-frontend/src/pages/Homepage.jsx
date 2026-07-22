@@ -244,7 +244,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Quick stats */}
+            {/* Quick stats */}                       
             <div className="reveal reveal-4 grid grid-cols-2 gap-3">
               {[
                 { label: "Cards mastered", value: "128" },

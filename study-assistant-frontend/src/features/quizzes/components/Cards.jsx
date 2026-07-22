@@ -12,8 +12,7 @@ export default function QuizCards({ qnIndex, quizData, total }) {
     // --- Hardcoded options for now ---
     // Swap this block once your backend returns item.options directly:
     // const options = item.options;
-    const options = [item.ans, "Sample option B", "Sample option C", "Sample option D"];
-
+    const options = item.options
     const remaining = total - qnIndex; // used for the depleting stack effect
 
     return (
