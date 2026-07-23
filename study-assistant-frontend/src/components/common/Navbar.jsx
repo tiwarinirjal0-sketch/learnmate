@@ -1,5 +1,4 @@
 import React from 'react';
-import { Search, Bell } from 'lucide-react';
 
 export default function Nav() {
   return (
