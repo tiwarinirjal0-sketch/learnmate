@@ -91,7 +91,7 @@ export default function ChatBox() {
               onKeyDown={handleKeyDown}
               placeholder="Message the assistant..."
               rows={1}
-              className="flex-1 resize-none bg-transparent outline-none text-[15px] leading-relaxed py-1.5 max-h-40"
+              className="flex-1 resize-none bg-transparent outline-none text-[15px] leading-relaxed py-1.5 max-h-40 text-gray-900 placeholder:text-gray-400"
             />
             <button
               onClick={sendMessage}
