@@ -15,10 +15,7 @@ const UserSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    profile: {
-        type: String,
-        default: '',
-    },
+    
 }, { timestamps: true });
 
 export default mongoose.model('User', UserSchema);

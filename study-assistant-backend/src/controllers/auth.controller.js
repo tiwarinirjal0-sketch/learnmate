@@ -14,7 +14,7 @@ const ai = new GoogleGenAI({
 
 export async function register(req, res) {
     try {
-        const { username, password, email, profile } = req.body;
+        const { username, password, email} = req.body;
 
         const existingUsername = await UserModel.findOne({ username });
         if (existingUsername) return res.status(400).send({ error: 'Username already exists!' });
@@ -23,11 +23,19 @@ export async function register(req, res) {
         if (existingEmail) return res.status(400).send({ error: 'Email already registered!' });
 
         const hashedPassword = await hashPassword(password);
-        await new UserModel({ username, password: hashedPassword, profile: profile || '', email }).save();
+        await new UserModel({ username, password: hashedPassword, email }).save();
 
-        return res.status(201).send({ msg: 'User Registered Successfully.' });
-    } catch (err) {
-        return res.status(500).send(err);
+        return res.status(201).send({
+             msg: 'User Registered Successfully.',
+             user:{
+                name:username,
+                email:email
+
+             }
+           
+         });
+    } catch (error) {
+        return res.status(500).json({error:error.message,stack:error.stack});
     }
 }
 
