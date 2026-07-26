@@ -24,9 +24,16 @@ export async function register(req, res) {
 
         const hashedPassword = await hashPassword(password);
         await new UserModel({ username, password: hashedPassword, email }).save();
+        
+        const token = await jwt.sign(
+            {name:username, email:email},
+            process.env.JWT_SECRET_KEY,
+            {expiresIn:"1d"}
 
-        return res.status(201).send({
+        )
+        return res.status(201).json({
              msg: 'User Registered Successfully.',
+             token:token,
              user:{
                 name:username,
                 email:email
