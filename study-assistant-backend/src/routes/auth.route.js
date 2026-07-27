@@ -5,7 +5,7 @@ import { auth, verifyUser, localVariables } from '../middleware/auth.middleware.
 const router = Router();
 
 router.post('/register', register);
-router.post('/login', verifyUser, login);
+router.post('/login', login);
 router.get('/user/:username', auth, getUser);
 router.put('/update', auth, updateUser);
 router.post('/chat', Chat)

@@ -14,7 +14,7 @@ const ai = new GoogleGenAI({
 
 export async function register(req, res) {
     try {
-        const { username, password, email, profile } = req.body;
+        const { username, password, email} = req.body;
 
         const existingUsername = await UserModel.findOne({ username });
         if (existingUsername) return res.status(400).send({ error: 'Username already exists!' });
@@ -23,19 +23,34 @@ export async function register(req, res) {
         if (existingEmail) return res.status(400).send({ error: 'Email already registered!' });
 
         const hashedPassword = await hashPassword(password);
-        await new UserModel({ username, password: hashedPassword, profile: profile || '', email }).save();
+        await new UserModel({ username, password: hashedPassword, email }).save();
+        
+        const token = await jwt.sign(
+            {name:username, email:email},
+            process.env.JWT_SECRET_KEY,
+            {expiresIn:"1d"}
 
-        return res.status(201).send({ msg: 'User Registered Successfully.' });
-    } catch (err) {
-        return res.status(500).send(err);
+        )
+        return res.status(201).json({
+             msg: 'User Registered Successfully.',
+             token:token,
+             user:{
+                name:username,
+                email:email
+
+             }
+           
+         });
+    } catch (error) {
+        return res.status(500).json({error:error.message,stack:error.stack});
     }
 }
 
 export async function login(req, res) {
     try {
-        const { username, password } = req.body;
+        const { email, password } = req.body;
 
-        const user = await UserModel.findOne({ username });
+        const user = await UserModel.findOne({ email });
         if (!user) return res.status(404).send({ error: 'User Not Found' });
 
         const isMatch = await comparePassword(password, user.password);
@@ -43,9 +58,17 @@ export async function login(req, res) {
 
         const token = jwt.sign({ userId: user._id, username: user.username }, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
 
-        return res.status(200).send({ msg: 'Login Successful', token });
+        return res.status(200).json({ 
+            msg: 'User Registered Successfully.',
+             token:token,
+             user:{
+                
+                email:email
+
+             }
+        });
     } catch (err) {
-        return res.status(500).send(err);
+        return res.status(500).json({message:err});
     }
 }
 
