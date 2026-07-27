@@ -11,7 +11,7 @@ export async function register(formData) {
     throw new Error(data.message || "Registration failed");
   }
 
-  return data;
+  return data
 }
 
 export async function login(formData){
