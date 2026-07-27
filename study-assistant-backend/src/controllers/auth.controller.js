@@ -48,9 +48,9 @@ export async function register(req, res) {
 
 export async function login(req, res) {
     try {
-        const { username, password } = req.body;
+        const { email, password } = req.body;
 
-        const user = await UserModel.findOne({ username });
+        const user = await UserModel.findOne({ email });
         if (!user) return res.status(404).send({ error: 'User Not Found' });
 
         const isMatch = await comparePassword(password, user.password);
@@ -58,9 +58,17 @@ export async function login(req, res) {
 
         const token = jwt.sign({ userId: user._id, username: user.username }, process.env.JWT_SECRET_KEY, { expiresIn: '7d' });
 
-        return res.status(200).send({ msg: 'Login Successful', token });
+        return res.status(200).json({ 
+            msg: 'User Registered Successfully.',
+             token:token,
+             user:{
+                
+                email:email
+
+             }
+        });
     } catch (err) {
-        return res.status(500).send(err);
+        return res.status(500).json({message:err});
     }
 }
 
