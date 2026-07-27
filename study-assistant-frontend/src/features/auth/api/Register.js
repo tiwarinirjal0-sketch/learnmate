@@ -1,5 +1,5 @@
 export async function register(formData) {
-  const res = await fetch(`http://localhost:5000/api/auth/register`, {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
@@ -15,7 +15,7 @@ export async function register(formData) {
 }
 
 export async function login(formData){
-  const res = await fetch(`http://localhost:5000/api/auth/login`,{
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/login`,{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify(formData)
