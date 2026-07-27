@@ -6,7 +6,7 @@ export default function Authentication() {
     const [isRegister, setIsRegister] = useState(false)
     const [error,setError] = useState("")
     const [loading, setLoading] = useState(false)
-    const {register} = useAuth()
+    const {register,login} = useAuth()
     const nav = useNavigate()
     const [formData, setFormData] = useState({
         username:"",
@@ -27,6 +27,7 @@ export default function Authentication() {
         e.preventDefault()
         setError("")
 
+        
         if(isRegister && formData.password !== formData.confirmpassword){
             setError("Password did not match")
             return
@@ -38,13 +39,14 @@ export default function Authentication() {
         setLoading(true)
         
         try {
-            await register(formData)
+            (isRegister)?await register(formData):await login(formData)
             nav("/")
         } catch (error) {
             setError(error.message || "registration failed .")
         }finally{
             setLoading(false)
         }
+         
     }
     const toggleMode = () => setIsRegister((prev) => !prev)
 
