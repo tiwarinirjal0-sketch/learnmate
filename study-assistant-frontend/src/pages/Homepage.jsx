@@ -120,7 +120,7 @@ export default function Home() {
                   </svg>
                 </div>
                 <div>
-                  <p className="font-semibold text-[15px] leading-none tracking-tight">Studyloop</p>
+                  <p className="font-semibold text-[15px] leading-none tracking-tight">Learn Mate</p>
                   <p className="text-[11px] text-white/40 mt-1">AI Study Assistant</p>
                 </div>
               </div>
