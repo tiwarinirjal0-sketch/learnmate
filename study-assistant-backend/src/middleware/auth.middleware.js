@@ -1,14 +1,28 @@
 import jwt from 'jsonwebtoken';
 import UserModel from '../model/User.model.js';
 
+
 export async function auth(req, res, next) {
     try {
-        const token = req.headers.authorization.split(' ')[1];
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({
+                error: "Authorization token missing"
+            });
+        }
+
+        const token = authHeader.split(" ")[1];
+
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
         req.user = decoded;
+
         next();
     } catch (err) {
-        return res.status(401).send({ error: 'Unauthorized' });
+        return res.status(401).json({
+            error: "Invalid or expired token"
+        });
     }
 }
 

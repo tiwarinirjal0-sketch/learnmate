@@ -4,6 +4,7 @@ dotenv.config();
 
 import UserModel from '../model/User.model.js';
 import jwt from 'jsonwebtoken';
+import UserChatHistoryModel from '../model/User.chatHistory.model.js';
 import { hashPassword, comparePassword } from '../utils/helper.js';
 import { GoogleGenAI } from '@google/genai';
 
@@ -102,6 +103,7 @@ export async function Chat(req, res){
             model:"gemini-2.5-flash",
             contents : req.body.message
         })
+       
         return res.status(200).json({
             reply:response.text
         })
@@ -179,5 +181,39 @@ export async function Summarize(req, res){
         result : await response.text})
     } catch (error) {
         return res.status(500).json({error:error.message})
+    }
+}
+export async function CreateNewChat(req, res){
+    try {
+        const {userId} = req.user
+        const chat = await UserChatHistoryModel.create({
+            user: userId,
+            title: "New Chat",
+            messages: []
+        });
+        return res.send("done")
+    } catch (error) {
+        return res.status(500).json({error:error.message})
+    }
+}
+
+
+export async function ReceiveChats(req, res) {
+    try {
+        const { userId } = req.user;
+
+        const chats = await UserChatHistoryModel
+            .find({ user: userId })
+            .sort({ updatedAt: -1 });
+
+        return res.status(200).json({
+            success: true,
+            chats
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            error: error.message
+        });
     }
 }
