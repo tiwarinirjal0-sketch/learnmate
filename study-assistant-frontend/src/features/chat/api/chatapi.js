@@ -20,12 +20,29 @@ export async function chatApi(message) {
         const data = await res.json();
 
      
-
-        return data;
         console.log(data)
+        return data;
+        
 
     } catch (error) {
         console.error(error);
         throw error;
     }
+}
+
+export async function ChatCreate(){
+    
+        const res = await fetch(`http://localhost:5000/api/auth/chatCreate`,{
+            method:"POST",
+            headers:{
+               "Authorization":`Bearer ${localStorage.getItem("token")}`
+            }
+        })
+        
+        const data = await res.json()
+        if(!res.ok)throw new Error(data.message||"Failed to create chat");
+        console.log(data)
+        return data
+        
+    
 }

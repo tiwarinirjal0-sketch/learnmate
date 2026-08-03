@@ -1,17 +1,29 @@
 import { useState, useRef, useEffect } from "react";
-import { chatApi } from "../api/chatapi";
+import { chatApi, ChatCreate } from "../api/chatapi";
+import { SettingsIcon } from "lucide-react";
 
 export default function ChatBox() {
   const [messages, setMessages] = useState([
     
   ]);
+  const [displayChatBox, setDisplayChatBox] = useState(false)
   const [input, setInput] = useState("");
   const scrollRef = useRef(null);
   const textareaRef = useRef(null);
-
+  const [error,setError] = useState("")
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    console.log(messages)
   }, [messages]);
+   
+  const handleChatCreation = async ()=>{
+    try {
+      await ChatCreate()
+      setDisplayChatBox(true)
+    } catch (error) {
+      setError(error.message)
+    }
+  }
 
   const autoGrow = (el) => {
     el.style.height = "auto";
@@ -39,6 +51,7 @@ export default function ChatBox() {
     ...prev,
     { role: "model", text: reply }
   ]);
+  
 };
 
   const handleKeyDown = (e) => {
@@ -48,6 +61,32 @@ export default function ChatBox() {
     }
   };
 
+  if(!displayChatBox && !error){
+    return(
+      <div className="flex flex-col w-full h-full justify-center items-center">
+        <div
+         onClick={async()=>{
+          await handleChatCreation()
+          }
+        }
+         className="w-10 h-10 border-2 border-gray-500 hover:border-gray-400 rounded-xl flex items-center justify-center hover:cursor-pointer">
+            <div className="text-2xl">+</div>
+            
+        </div>
+        <button className="text-amber-200 hover:text-amber-50 hover:cursor-pointer">
+          Start New Chat
+        </button>
+      </div>
+
+    )
+  }
+  if(error){
+    return(
+       <div className="flex flex-col w-full h-full justify-center items-center">
+        {error}
+       </div>
+    )
+  }
   return (
     <div className="flex flex-col w-full h-full bg-white">
       {/* Messages */}
