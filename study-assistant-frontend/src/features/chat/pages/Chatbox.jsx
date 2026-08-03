@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { chatApi, ChatCreate } from "../api/chatapi";
+import { AddChats, chatApi, ChatCreate } from "../api/chatapi";
 import { SettingsIcon } from "lucide-react";
 
 export default function ChatBox() {
@@ -14,6 +14,16 @@ export default function ChatBox() {
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
     console.log(messages)
+    
+    const chatAdd = async () => {
+    try {
+      await AddChats(messages); // or AddChats() if it takes no argument
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  chatAdd();
   }, [messages]);
    
   const handleChatCreation = async ()=>{

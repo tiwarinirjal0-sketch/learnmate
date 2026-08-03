@@ -42,7 +42,24 @@ export async function ChatCreate(){
         const data = await res.json()
         if(!res.ok)throw new Error(data.message||"Failed to create chat");
         console.log(data)
+        localStorage.setItem("chatId",data.chat._id)
         return data
         
+    
+}
+
+export async function AddChats(messages){
+    const res = await fetch(`http://localhost:5000/api/auth/addChats/${localStorage.getItem('chatId')}`,{
+        method:"POST",
+        headers:{
+            "Authorization":`Bearer ${localStorage.getItem("token")}`,
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify(messages[messages.length-1])
+
+    })
+    const data = await res.json()
+    if(!res.ok)throw new Error(data.message||"creation failed");
+    console.log(data)
     
 }
