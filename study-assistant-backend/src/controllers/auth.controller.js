@@ -191,12 +191,47 @@ export async function CreateNewChat(req, res){
             title: "New Chat",
             messages: []
         });
-        return res.send("done")
+        return res.json({chat})
     } catch (error) {
         return res.status(500).json({error:error.message})
     }
 }
 
+
+export async function AddMessageToChat(req, res) {
+    try {
+        const chatId = req.params.id;
+        const { userId } = req.user;
+        const { role, text } = req.body;
+
+        const chat = await UserChatHistoryModel.findOneAndUpdate(
+            {
+                _id: chatId,
+                user: userId,
+            },
+            {
+                $push: {
+                    messages: {
+                        role,
+                        text,
+                        createdAt: new Date(),
+                    },
+                },
+            },
+            {
+                returnDocument: "after",
+            }
+        );
+
+        if (!chat) {
+            return res.status(404).json({ error: "Chat not found" });
+        }
+
+        res.status(200).json(chat);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
 
 export async function ReceiveChats(req, res) {
     try {
