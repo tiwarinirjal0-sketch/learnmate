@@ -1,39 +1,52 @@
 import { useState, useRef, useEffect } from "react";
 import { AddChats, chatApi, ChatCreate } from "../api/chatapi";
 import { SettingsIcon } from "lucide-react";
+import { useChat } from "../../../context/ChatContext";
 
 export default function ChatBox() {
-  const [messages, setMessages] = useState([
-    
-  ]);
-  const [displayChatBox, setDisplayChatBox] = useState(false)
+  const [messages, setMessages] = useState([]);
+  const { historyMessages } = useChat();
+  const [displayChatBox, setDisplayChatBox] = useState(false);
   const [input, setInput] = useState("");
   const scrollRef = useRef(null);
   const textareaRef = useRef(null);
-  const [error,setError] = useState("")
+  const [error, setError] = useState("");
+  const isInitialLoad = useRef(true); // tracks whether the next `messages` change is a history load
+
+  useEffect(() => {
+    isInitialLoad.current = true; // mark that this update came from history, not a new send
+    setMessages(historyMessages || []);
+    console.log(historyMessages)
+  }, [historyMessages]);
+
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-    console.log(messages)
-    
+
+    if (isInitialLoad.current) {
+      // this update was just loading past history — don't re-POST it
+      isInitialLoad.current = false;
+      return;
+    }
+
     const chatAdd = async () => {
+      try {
+        await AddChats(messages);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+
+    chatAdd();
+  }, [messages]);
+
+  const handleChatCreation = async () => {
     try {
-      await AddChats(messages); // or AddChats() if it takes no argument
+      await ChatCreate();
+      setDisplayChatBox(true);
     } catch (error) {
-      console.error(error.message);
+      setError(error.message);
     }
   };
-
-  chatAdd();
-  }, [messages]);
-   
-  const handleChatCreation = async ()=>{
-    try {
-      await ChatCreate()
-      setDisplayChatBox(true)
-    } catch (error) {
-      setError(error.message)
-    }
-  }
 
   const autoGrow = (el) => {
     el.style.height = "auto";
@@ -41,28 +54,21 @@ export default function ChatBox() {
   };
 
   const sendMessage = async () => {
-  if (!input.trim()) return;
+    if (!input.trim()) return;
 
-  const updatedMessages = [
-    ...messages,
-    { role: "user", text: input }
-  ];
+    const updatedMessages = [...messages, { role: "user", text: input }];
 
-  setMessages(updatedMessages);
-  setInput("");
+    setMessages(updatedMessages);
+    setInput("");
 
-  if (textareaRef.current) {
-    textareaRef.current.style.height = "auto";
-  }
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
 
-  const { reply } = await chatApi(updatedMessages);
+    const { reply } = await chatApi(updatedMessages);
 
-  setMessages((prev) => [
-    ...prev,
-    { role: "model", text: reply }
-  ]);
-  
-};
+    setMessages((prev) => [...prev, { role: "model", text: reply }]);
+  };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -71,39 +77,34 @@ export default function ChatBox() {
     }
   };
 
-  if(!displayChatBox && !error){
-    return(
+  if (!displayChatBox && !error) {
+    return (
       <div className="flex flex-col w-full h-full justify-center items-center">
         <div
-         onClick={async()=>{
-          await handleChatCreation()
-          }
-        }
-         className="w-10 h-10 border-2 border-gray-500 hover:border-gray-400 rounded-xl flex items-center justify-center hover:cursor-pointer">
-            <div className="text-2xl">+</div>
-            
+          onClick={async () => {
+            await handleChatCreation();
+          }}
+          className="w-10 h-10 border-2 border-gray-500 hover:border-gray-400 rounded-xl flex items-center justify-center hover:cursor-pointer"
+        >
+          <div className="text-2xl">+</div>
         </div>
         <button className="text-amber-200 hover:text-amber-50 hover:cursor-pointer">
           Start New Chat
         </button>
       </div>
-
-    )
+    );
   }
-  if(error){
-    return(
-       <div className="flex flex-col w-full h-full justify-center items-center">
+  if (error) {
+    return (
+      <div className="flex flex-col w-full h-full justify-center items-center">
         {error}
-       </div>
-    )
+      </div>
+    );
   }
   return (
     <div className="flex flex-col w-full h-full bg-white">
       {/* Messages */}
-      <div
-        ref={scrollRef}
-        className="flex-1 overflow-y-auto px-4 py-6"
-      >
+      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-6">
         <div className="max-w-2xl mx-auto space-y-6">
           {messages.map((msg, i) =>
             msg.role === "user" ? (
