@@ -1,5 +1,4 @@
 import { createContext, useContext, useState } from "react";
-import { getChats } from "../features/chat/api/chatapi";
 import { useAuth } from "./AuthContext";
 
 const ChatContext = createContext(null);

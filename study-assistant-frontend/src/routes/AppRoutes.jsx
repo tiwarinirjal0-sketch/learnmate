@@ -6,6 +6,8 @@ import Flashcards from "../features/flashcards/pages/Flashcards";
 import Summarize from "../features/summaries/pages/Summarize";
 import ProtectedRoutes from "./ProtectedRoute";
 import Authentication from "../features/auth/pages/Auth";
+import ChatHistory from "../features/history/pages/chatHistory";
+import ChatSpecific from "../features/history/pages/chatspecific";
 
 const AppRoutes = () => {
   return (
@@ -25,6 +27,16 @@ const AppRoutes = () => {
       <Route path="/summarizer" element={
         <ProtectedRoutes>
           <Summarize />
+        </ProtectedRoutes>
+        } />
+        <Route path="/myChats" element={
+        <ProtectedRoutes>
+          <ChatHistory />
+        </ProtectedRoutes>
+        } />
+        <Route path="/chatspecific" element={
+        <ProtectedRoutes>
+          <ChatSpecific />
         </ProtectedRoutes>
         } />
     </Routes>

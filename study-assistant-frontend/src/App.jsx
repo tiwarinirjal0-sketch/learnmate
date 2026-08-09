@@ -3,15 +3,18 @@ import Nav from "./components/common/Navbar";
 import AppRoutes from "./routes/AppRoutes";
 import { AuthProvider } from "./context/AuthContext";
 import { ChatProvider } from "./context/ChatContext";
+import { HistoryContextProvider } from "./context/HistoryContext";
 export default function App() {
   return (
-    <AuthProvider>
-     <ChatProvider>
-      <BrowserRouter>
-        <Nav />
-        <AppRoutes />
-      </BrowserRouter>
-     </ChatProvider>
-   </AuthProvider>
+    <HistoryContextProvider>
+      <AuthProvider>
+      <ChatProvider>
+        <BrowserRouter>
+          <Nav />
+          <AppRoutes />
+        </BrowserRouter>
+      </ChatProvider>
+    </AuthProvider>
+   </HistoryContextProvider>
   );
 }

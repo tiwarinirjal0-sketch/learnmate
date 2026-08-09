@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { AddChats, chatApi, ChatCreate } from "../api/chatapi";
-import { SettingsIcon } from "lucide-react";
 import { useChat } from "../../../context/ChatContext";
 
-export default function ChatBox() {
+export default function ChatBox({prevMessages}) {
+
   const [messages, setMessages] = useState([]);
   const { historyMessages } = useChat();
   const [displayChatBox, setDisplayChatBox] = useState(false);
@@ -12,12 +12,13 @@ export default function ChatBox() {
   const textareaRef = useRef(null);
   const [error, setError] = useState("");
   const isInitialLoad = useRef(true); // tracks whether the next `messages` change is a history load
+  
+  if(prevMessages){
+    useEffect(()=>{
+     setMessages(prevMessages)
+  },[prevMessages])
 
-  useEffect(() => {
-    isInitialLoad.current = true; // mark that this update came from history, not a new send
-    setMessages(historyMessages || []);
-    console.log(historyMessages)
-  }, [historyMessages]);
+  }
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -77,7 +78,7 @@ export default function ChatBox() {
     }
   };
 
-  if (!displayChatBox && !error) {
+  if (!displayChatBox && !error && !prevMessages) {
     return (
       <div className="flex flex-col w-full h-full justify-center items-center">
         <div
@@ -106,7 +107,13 @@ export default function ChatBox() {
       {/* Messages */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-6">
         <div className="max-w-2xl mx-auto space-y-6">
-          {messages.map((msg, i) =>
+          
+          {
+          messages
+          .filter((msg=>msg.role!==undefined||null))
+          .filter((msg=>msg.text!==undefined||null))
+          .map((msg, i) =>
+            
             msg.role === "user" ? (
               <div key={i} className="flex justify-end">
                 <div className="max-w-[75%] bg-gray-100 text-gray-900 px-4 py-2.5 rounded-2xl text-[15px] leading-relaxed">
@@ -143,6 +150,8 @@ export default function ChatBox() {
               rows={1}
               className="flex-1 resize-none bg-transparent outline-none text-[15px] leading-relaxed py-1.5 max-h-40 text-gray-900 placeholder:text-gray-400"
             />
+            {
+            (!prevMessages)&&
             <button
               onClick={sendMessage}
               disabled={!input.trim()}
@@ -163,6 +172,7 @@ export default function ChatBox() {
                 <path d="M5 12l7-7 7 7" />
               </svg>
             </button>
+            }
           </div>
           <p className="text-xs text-gray-400 text-center mt-2">
             AI can make mistakes. Check important info.

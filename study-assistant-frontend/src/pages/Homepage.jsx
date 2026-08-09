@@ -1,9 +1,8 @@
 import { useAuth } from "../context/AuthContext";
 import { useChat } from "../context/ChatContext";
-import { getChats } from "../features/chat/api/chatapi";
 import ChatBox from "../features/chat/pages/Chatbox";
 import { useNavigate } from "react-router-dom";
-
+import {useHistoryContext} from "../context/HistoryContext"
 
 const navItems = [
   {
@@ -43,7 +42,7 @@ const navItems = [
   },
   {
     label:"My Chats",
-    history:true
+    path:'/myChats'
 
   },
   {
@@ -64,6 +63,7 @@ const suggestions = [
 export default function Home() {
   const nav = useNavigate();
   const {user} = useAuth()
+  const {setShowChatHistory} = useHistoryContext()
   const {setHistoryMessages, clickForChats} = useChat()
 
   return (
@@ -143,12 +143,14 @@ export default function Home() {
                 <button
                   key={item.path}
                    onClick={async () => {
-                    if (item.history) {                 // was item.onlick === "history"
-                      const data = await getChats();
-                      setHistoryMessages(data);         // was data.messages — getChats() already returns the array
-                    } else if (item.path) {
-                      nav(item.path);
+                    if(item.label=="My Chats"){
+                      setShowChatHistory(true)
+                      nav('/myChats')
+
+                    }else{
+                      nav(item.path)
                     }
+                    
                   }}
                   className="group relative flex items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.03] hover:bg-white/[0.06] backdrop-blur-xl px-4 py-3.5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-white/15 hover:shadow-lg hover:shadow-black/20"
                 >
