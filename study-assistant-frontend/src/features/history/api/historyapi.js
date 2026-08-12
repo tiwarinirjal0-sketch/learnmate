@@ -1,5 +1,5 @@
 export async function getChats(){
-    const res = await fetch(`http://localhost:5000/api/auth/getChats`,{
+    const res = await fetch(`http://localhost:5000/api/auth/chats`,{
         method:"GET",
         headers:{
             

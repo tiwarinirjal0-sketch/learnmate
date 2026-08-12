@@ -252,3 +252,22 @@ export async function ReceiveChats(req, res) {
         });
     }
 }
+
+
+export async function SpecificChat(req, res){
+    try {
+       const {id} = req.params
+       const chats = await UserChatHistoryModel
+       .find({_id:id})
+       
+       return res.status(200).json({
+            success: true,
+            chats
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+}
