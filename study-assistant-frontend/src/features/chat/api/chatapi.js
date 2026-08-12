@@ -32,7 +32,7 @@ export async function chatApi(message) {
 
 export async function ChatCreate(){
     
-        const res = await fetch(`http://localhost:5000/api/auth/chatCreate`,{
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/chatCreate`,{
             method:"POST",
             headers:{
                "Authorization":`Bearer ${localStorage.getItem("token")}`
@@ -49,7 +49,7 @@ export async function ChatCreate(){
 }
 
 export async function AddChats(messages){
-    const res = await fetch(`http://localhost:5000/api/auth/addChats/${localStorage.getItem('chatId')}`,{
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/addChats/${localStorage.getItem('chatId')}`,{
         method:"POST",
         headers:{
             "Authorization":`Bearer ${localStorage.getItem("token")}`,
