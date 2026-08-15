@@ -1,5 +1,5 @@
 export async function getChats(){
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/chats`,{
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/chats/1235683566`,{
         method:"GET",
         headers:{
             
